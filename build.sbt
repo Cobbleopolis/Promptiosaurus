@@ -2,7 +2,7 @@ name := "Promptiosaurus"
 
 version := "1.0"
 
-lazy val `promptiosaurus` = (project in file(".")).enablePlugins(PlayScala)
+lazy val `promptiosaurus` = (project in file(".")).enablePlugins(PlayScala, DebianPlugin, BuildInfoPlugin)
 
 scalaVersion := "2.11.7"
 

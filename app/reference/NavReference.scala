@@ -1,10 +1,12 @@
 package reference
 
+import buildinfo.BuildInfo
+
 object NavReference {
     
     object Pages {
         
-        case class Page (label: String, path: String, title: String = App.name)
+        case class Page (label: String, path: String, title: String = BuildInfo.name)
         
         val HOME   = Page("Home", "/")
         val LOGIN  = Page("Login", "/login")

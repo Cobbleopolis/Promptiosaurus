@@ -9,3 +9,5 @@ addSbtPlugin("default" % "sbt-sass" % "0.1.9")
 addSbtPlugin("name.de-vries" % "sbt-typescript" % "0.2.6")
 
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.6.1")
+
+addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.6.0")
