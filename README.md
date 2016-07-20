@@ -4,6 +4,13 @@
 
 Contributions are always welcome!
 
+## TODO
+
+These are in no particular order
+
+- Add tests
+- Add db support (possibly scalikejdbc)
+
 
 ## Copyright and license
 
