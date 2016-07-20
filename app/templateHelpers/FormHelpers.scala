@@ -1,4 +1,4 @@
-package util
+package templateHelpers
 
 object FormHelpers {
     import views.html.helper.FieldConstructor

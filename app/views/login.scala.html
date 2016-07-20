@@ -1,17 +1,30 @@
 @import auth.User
+@import templateHelpers.LogoSvg
+@import b3.vertical.fieldConstructor  // Declares a vertical field constructor as default
 @(loginForm: Form[Option[User]])(implicit messages: Messages)
 
-@layout("Login") {
-    @if(loginForm.hasGlobalErrors) {
-        <ul>
-        @for(error <- loginForm.globalErrors) {
-            <li>@error.message</li>
-        }
-        </ul>
-    }
-    @helper.form(action = routes.Auth.authenticate) {
-        @helper.inputText(loginForm("email"))
-        @helper.inputPassword(loginForm("password"))
-        <button type="submit">Login</button>
-    }
+@layout(reference.NavReference.Pages.LOGIN) {
+    <div class="row top-gutter">
+        <div class="col-md-4 center-block text-center">
+            @*<img class="logo" src="@routes.Assets.at("images/logo.png")">*@
+            @LogoSvg.render('height -> 144, 'width -> 144 * LogoSvg.aspectRatio)
+            <h3>Sign in to @reference.App.name</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 center-block well">
+            @if(loginForm.hasGlobalErrors) {
+                <ul>
+                @for(error <- loginForm.globalErrors) {
+                    <li>@error.message</li>
+                }
+                </ul>
+            }
+            @b3.form(action = routes.Auth.authenticate) {
+                @b3.email( loginForm("email"), '_label -> "Email", 'placeholder -> "example@mail.com" )
+                @b3.password( loginForm("password"), '_label -> "Password", 'placeholder -> "Password" )
+                @b3.submit('class -> "btn btn-success btn-block"){ Sign in }
+            }
+        </div>
+    </div>
 }

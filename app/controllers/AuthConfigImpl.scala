@@ -4,7 +4,7 @@ import auth.Role._
 import auth.User
 import jp.t2v.lab.play2.auth.AuthConfig
 import play.api.mvc.Results._
-import play.api.mvc.{RequestHeader, Result}
+import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.reflect._

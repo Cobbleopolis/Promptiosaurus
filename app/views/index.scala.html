@@ -1,7 +1,7 @@
 @(message: String)
 
-@layout("Welcome to Play") {
+@layout(reference.NavReference.Pages.HOME) {
 
-    @play20.welcome(message)
+    <p>@message</p>
 
 }

@@ -1,68 +1,19 @@
-//@import 'material-colors'
-//@import 'material-shadows'
-//@import 'util-functions'
-//
-////fonts
-//$fontIcon: Material Icons
-//$mainFont: 'Roboto', sans-serif
-//
-//
-//body
-//    font-family: $mainFont !important
-//    margin: 0
-//
-#logo
-    height: 100%
-    display: inline
-    padding-right: 15px
-//
-//#title
-//    font-size: 1.5rem
-//
-//#window-header
-//    padding: 1rem
-//    background-color: material-color(blue, 700)
-//    +dropShadow(1)
-//    //+transition(box-shadow 0.1s linear)
-//    //&:hover
-//    //    +dropShadow(2)
-//    p
-//        margin: 0
-//
-//#userSection
-//    float: right
-//    a
-//        color: material-color(red, 200)
-//
-//#content
-//    width: 100%
-//    text-align: center
-//
-//#content *
-//    text-align: initial
-//
-//.card
-//    +dropShadow(1)
-//    border-radius: 0.125rem
-//    max-width: 50%
-//    padding: 1rem
-//    display: inline-block !important
-//    +transition(box-shadow 0.1s linear)
-//    &:active
-//        +dropShadow(2)
-//
-//button
-//    background-color: material-color(blue, 500)
-//    border: none
-//        radius: 0.125rem
-//    padding: 0.5rem
-//    margin: 0.5rem
-//    font-weight: bold
-//    +dropShadow(1)
-//
 @import "variables"
 @import "lib/bootstrap-sass/stylesheets/bootstrap"
 @import "lib/font-awesome-sass/assets/stylesheets/font-awesome"
+@import "overrides"
 
 body
     margin-top: $navbar-height
+
+#nav-logo
+    height: 100%
+    display: inline
+    padding-right: 15px
+
+.row
+    &.top-gutter
+        margin-top: $grid-gutter-width
+
+.logo
+    height: 3em
