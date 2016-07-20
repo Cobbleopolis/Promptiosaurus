@@ -1,0 +1,17 @@
+@import auth.User
+@(loginForm: Form[Option[User]])(implicit messages: Messages)
+
+@layout("Login") {
+    @if(loginForm.hasGlobalErrors) {
+        <ul>
+        @for(error <- loginForm.globalErrors) {
+            <li>@error.message</li>
+        }
+        </ul>
+    }
+    @helper.form(action = routes.Auth.authenticate) {
+        @helper.inputText(loginForm("email"))
+        @helper.inputPassword(loginForm("password"))
+        <button type="submit">Login</button>
+    }
+}

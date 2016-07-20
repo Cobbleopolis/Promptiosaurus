@@ -33,7 +33,7 @@ trait AuthConfigImpl extends AuthConfig {
 	type Authority = Role
 
 	/**
-	  * A `ClassTag` is used to retrieve an id from the Cache API.
+	  * A `ClassTag` is used to retrieve an email from the Cache API.
 	  * Use something like this:
 	  */
 	val idTag: ClassTag[Id] = classTag[Id]
@@ -48,25 +48,25 @@ trait AuthConfigImpl extends AuthConfig {
 	  * You can alter the procedure to suit your application.
 	  */
 	def resolveUser(id: Id)(implicit ctx: ExecutionContext): Future[Option[User]] =
-		Future.successful(User.findById(id))
+		Future.successful(User.findByEmail(id))
 
 	/**
 	  * Where to redirect the user after a successful login.
 	  */
 	def loginSucceeded(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] =
-		Future.successful(Redirect(routes.Application.index()))
+		Future.successful(Redirect(routes.Application.user()))
 
 	/**
 	  * Where to redirect the user after logging out
 	  */
 	def logoutSucceeded(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] =
-		Future.successful(Redirect(routes.Application.login()))
+		Future.successful(Redirect(routes.Auth.login))
 
 	/**
 	  * If the user is not logged in and tries to access a protected resource then redirect them as follows:
 	  */
 	def authenticationFailed(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] =
-		Future.successful(Redirect(routes.Application.login()))
+		Future.successful(Redirect(routes.Auth.login))
 
 	/**
 	  * If authorization failed (usually incorrect password) redirect the user as follows:

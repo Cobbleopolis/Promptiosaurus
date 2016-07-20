@@ -1,0 +1,6 @@
+@import auth.User
+@(user: User)
+
+@layout(user.email) {
+    <p>Hello @user.email</p>
+}
