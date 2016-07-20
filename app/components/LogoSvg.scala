@@ -1,4 +1,4 @@
-package templateHelpers
+package components
 
 import play.twirl.api.Html
 
@@ -18,7 +18,7 @@ object LogoSvg {
         val paramString: String = combinedList.foldLeft("") { (s: String, pair: (Symbol, Any)) =>
             s + pair._1.name + "=\"" + pair._2.toString + "\""
         }
-        views.html.helpers.logoSvg(paramString)
+        views.html.componentTemplates.logoSvg(paramString)
     }
     
 }
