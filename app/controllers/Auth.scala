@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-import auth.User
+import auth.{TokenValidateElement, User}
 import jp.t2v.lab.play2.auth.LoginLogout
 import play.api.data.Form
 import play.api.data.Forms._
@@ -12,7 +12,7 @@ import play.api.mvc._
 import scala.concurrent.Future
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
-class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with LoginLogout with AuthConfigImpl with I18nSupport {
+class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with TokenValidateElement with LoginLogout with AuthConfigImpl with I18nSupport {
     
     def login = Action { implicit request =>
         Ok(views.html.login(Auth.loginForm))
@@ -35,7 +35,7 @@ class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with Login
 
 object Auth {
     val loginForm = Form {
-        mapping("email" -> email, "password" -> text)(User.authenticate)(_.map(u => (u.email, "")))
-            .verifying("Invalid email or password", result => result.isDefined)
+        mapping("email" -> email, "password" -> nonEmptyText)(User.authenticate)(_.map(u => (u.email, "")))
+            .verifying("Invalid username or password", result => result.isDefined)
     }
 }

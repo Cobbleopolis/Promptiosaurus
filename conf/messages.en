@@ -1,0 +1,10 @@
+pages.home=Home
+pages.login=Login
+pages.logout=Logout
+pages.user=User
+
+login.signInHeader=Sign in to {0}
+login.loginForm.email.label=Email
+login.loginForm.email.placeholder=example@mail.com
+login.loginForm.password.label=Password
+login.loginForm.password.placeholder=Password

@@ -2,7 +2,7 @@ package controllers
 
 import auth.Role._
 import auth.User
-import jp.t2v.lab.play2.auth.AuthConfig
+import jp.t2v.lab.play2.auth.{AsyncIdContainer, AuthConfig, CookieIdContainer}
 import play.api.mvc.Results._
 import play.api.mvc._
 
@@ -37,6 +37,8 @@ trait AuthConfigImpl extends AuthConfig {
       * Use something like this:
       */
     val idTag: ClassTag[Id] = classTag[Id]
+    
+    override lazy val idContainer: AsyncIdContainer[Id] = AsyncIdContainer(new CookieIdContainer[Id])
 
     /**
       * The session timeout in seconds

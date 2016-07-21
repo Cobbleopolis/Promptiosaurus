@@ -1,14 +1,13 @@
 @import auth.User
 @import b3.vertical.fieldConstructor
 @import components.LogoSvg  // Declares a vertical field constructor as default
-@(loginForm: Form[Option[User]])(implicit messages: Messages)
+@(loginForm: Form[Option[User]])(implicit messages: Messages, flash: Flash)
 
 @layout(reference.NavReference.Pages.LOGIN) {
     <div class="row top-gutter">
         <div class="col-md-4 center-block text-center">
-            @*<img class="logo" src="@routes.Assets.at("images/logo.png")">*@
             @LogoSvg.render('height -> 144, 'width -> 144 * LogoSvg.aspectRatio)
-            <h3>Sign in to @buildinfo.BuildInfo.name</h3>
+            <h3>@Messages("login.signInHeader", buildinfo.BuildInfo.name)</h3>
         </div>
     </div>
     <div class="row">
@@ -16,13 +15,29 @@
             @if(loginForm.hasGlobalErrors) {
                 <ul>
                 @for(error <- loginForm.globalErrors) {
-                    <li>@error.message</li>
+                    <li>@Messages(error.message)</li>
                 }
                 </ul>
             }
+            @flash.get("success").map { message =>
+                <p class="success">
+                    @Messages(message)
+                </p>
+            }
             @b3.form(action = routes.Auth.authenticate) {
-                @b3.email( loginForm("email"), '_label -> "Email", 'placeholder -> "example@mail.com" )
-                @b3.password( loginForm("password"), '_label -> "Password", 'placeholder -> "Password" )
+                @b3.inputWrapped("email", loginForm("email"),
+                    '_label -> Messages("login.loginForm.email.label"),
+                    'placeholder -> Messages("login.loginForm.email.placeholder")
+                ) { input =>
+                    <div class="input-group">
+                        <span class="input-group-addon">@@</span>
+                        @input
+                    </div>
+                }
+                @b3.password( loginForm("password"),
+                    '_label -> Messages("login.loginForm.password.label"),
+                    'placeholder -> Messages("login.loginForm.password.placeholder")
+                )
                 @b3.submit('class -> "btn btn-success btn-block"){ Sign in }
             }
         </div>

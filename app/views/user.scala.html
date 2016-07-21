@@ -1,5 +1,5 @@
 @import auth.User
-@()(implicit user: User)
+@(user: User)(implicit messages: Messages)
 
 @layout(reference.NavReference.Pages.USER) {
     <p>Hello @user.email</p>

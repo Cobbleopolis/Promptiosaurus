@@ -1,9 +1,9 @@
 @import reference.NavReference.Pages.Page
-@(currentPage: Page)
+@(currentPage: Page)(implicit messages: Messages)
 
 @renderPageLink(link: Page) = {
     <li @if(link == currentPage) {
-        class="active"}><a href="@link.path">@link.label</a></li>
+        class="active"}><a href="@link.path">@Messages(link.label)</a></li>
 }
 
 <nav class="navbar navbar-default navbar-fixed-top">
