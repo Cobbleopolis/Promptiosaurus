@@ -25,15 +25,10 @@
                 </p>
             }
             @b3.form(action = routes.Auth.authenticate) {
-                @b3.inputWrapped("email", loginForm("email"),
+                @b3.email(loginForm("email"),
                     '_label -> Messages("login.loginForm.email.label"),
                     'placeholder -> Messages("login.loginForm.email.placeholder")
-                ) { input =>
-                    <div class="input-group">
-                        <span class="input-group-addon">@@</span>
-                        @input
-                    </div>
-                }
+                )
                 @b3.password( loginForm("password"),
                     '_label -> Messages("login.loginForm.password.label"),
                     'placeholder -> Messages("login.loginForm.password.placeholder")
