@@ -2,7 +2,7 @@ package controllers
 
 import auth.Role._
 import auth.User
-import jp.t2v.lab.play2.auth.{AsyncIdContainer, AuthConfig, CookieIdContainer}
+import jp.t2v.lab.play2.auth.{AsyncIdContainer, AuthConfig, TransparentIdContainer}
 import play.api.mvc.Results._
 import play.api.mvc._
 
@@ -37,8 +37,8 @@ trait AuthConfigImpl extends AuthConfig {
       * Use something like this:
       */
     val idTag: ClassTag[Id] = classTag[Id]
-    
-    override lazy val idContainer: AsyncIdContainer[Id] = AsyncIdContainer(new CookieIdContainer[Id])
+
+    override lazy val idContainer: AsyncIdContainer[Id] = AsyncIdContainer(new TransparentIdContainer[Id])
 
     /**
       * The session timeout in seconds
@@ -62,7 +62,7 @@ trait AuthConfigImpl extends AuthConfig {
       * Where to redirect the user after logging out
       */
     def logoutSucceeded(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] =
-        Future.successful(Redirect(routes.Auth.login))
+        Future.successful(Redirect(routes.Auth.login()))
 
     /**
       * If the user is not logged in and tries to access a protected resource then redirect them as follows:
@@ -71,7 +71,7 @@ trait AuthConfigImpl extends AuthConfig {
         Future.successful {
             request.headers.get("X-Requested-With") match {
                 case Some("XMLHttpRequest") => Unauthorized("Authentication failed")
-                case _ => Redirect(routes.Auth.login)
+                case _ => Redirect(routes.Auth.login())
             }
         }
 

@@ -8,17 +8,19 @@ import play.api.data.Forms._
 
 trait TokenValidateElement extends StackableController {
     self: Controller =>
-    
+
+    //TODO CSRF protection
+
     private val tokenForm = Form("token" -> text)
-    
+
     private def validateToken(request: Request[_]): Boolean = (for {
         tokenInForm <- tokenForm.bindFromRequest()(request).value
         tokenInSession <- request.session.get("token")
     } yield tokenInForm == tokenInSession).getOrElse(false)
-    
+
     override def proceed[A](request: RequestWithAttributes[A])(f: RequestWithAttributes[A] => Future[Result]): Future[Result] = {
         if (validateToken(request)) super.proceed(request)(f)
         else Future.successful(BadRequest)
     }
-    
+
 }
