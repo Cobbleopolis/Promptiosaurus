@@ -1,4 +1,4 @@
-@import auth.User
+@import models.User
 @import b3.vertical.fieldConstructor
 @import components.LogoSvg  // Declares a vertical field constructor as default
 @(loginForm: Form[Option[User]])(implicit messages: Messages, flash: Flash)
@@ -25,13 +25,11 @@
                 </p>
             }
             @b3.form(action = routes.Auth.authenticate) {
-                @b3.email(loginForm("email"),
-                    '_label -> Messages("login.loginForm.email.label"),
-                    'placeholder -> Messages("login.loginForm.email.placeholder")
+                @b3.text(loginForm("username"),
+                    '_label -> Messages("login.loginForm.username.label")
                 )
                 @b3.password( loginForm("password"),
-                    '_label -> Messages("login.loginForm.password.label"),
-                    'placeholder -> Messages("login.loginForm.password.placeholder")
+                    '_label -> Messages("login.loginForm.password.label")
                 )
                 @b3.submit('class -> "btn btn-success btn-block"){ Sign in }
             }

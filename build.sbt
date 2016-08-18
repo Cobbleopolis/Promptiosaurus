@@ -42,7 +42,8 @@ val database = Seq(
 
 val otherDependencies = Seq(
   "com.adrianhurt" %% "play-bootstrap" % "1.0-P25-B3" exclude("org.webjars", "jquery"),
-  "org.scalikejdbc" %% "scalikejdbc-test"   % "2.4.2"   % "test"
+  "org.scalikejdbc" %% "scalikejdbc-test"   % "2.4.2"   % "test",
+  "org.mindrot" % "jbcrypt" % "0.3m"
 )
 
 lazy val `promptiosaurus` = (project in file(".")).enablePlugins(PlayScala, DebianPlugin, BuildInfoPlugin)

@@ -11,12 +11,13 @@ import play.api.mvc._
 
 import scala.concurrent.Future
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import util.AuthUtil
 
 class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with LoginLogout with AuthConfigImpl with I18nSupport {
 
     val loginForm = Form {
-        mapping("email" -> email, "password" -> text)(User.authenticate)(_.map(u => (u.email, "")))
-            .verifying("Invalid email or password", result => result.isDefined)
+        mapping("username" -> nonEmptyText, "password" -> nonEmptyText)(AuthUtil.authenticate)(_.map(u => (u.username, "")))
+            .verifying("Invalid username or password", result => result.isDefined)
     }
 
     def login = Action { implicit request =>
@@ -32,7 +33,7 @@ class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with Login
     def authenticate = Action.async { implicit request =>
         loginForm.bindFromRequest.fold(
             formWithErrors => Future.successful(BadRequest(views.html.login(formWithErrors))),
-            user           => gotoLoginSucceeded(user.get.email)
+            user           => gotoLoginSucceeded(user.get.username)
         )
     }
 }
