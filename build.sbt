@@ -32,12 +32,17 @@ val auth = Seq(
 
 
 val database = Seq(
-  "com.typesafe.play" %% "anorm" % "3.0.0-M1",
-  "mysql" % "mysql-connector-java" % "5.1.36"
+  "mysql" % "mysql-connector-java" % "5.1.36",
+  "org.scalikejdbc" %% "scalikejdbc"                    % "2.4.2",
+  "org.scalikejdbc" %% "scalikejdbc-config"             % "2.4.2",
+  "org.scalikejdbc" %% "scalikejdbc-play-initializer"   % "2.5.1",
+  "org.scalikejdbc" %% "scalikejdbc-play-dbapi-adapter" % "2.5.1"
+
 )
 
 val otherDependencies = Seq(
-  "com.adrianhurt" %% "play-bootstrap" % "1.0-P25-B3" exclude("org.webjars", "jquery")
+  "com.adrianhurt" %% "play-bootstrap" % "1.0-P25-B3" exclude("org.webjars", "jquery"),
+  "org.scalikejdbc" %% "scalikejdbc-test"   % "2.4.2"   % "test"
 )
 
 lazy val `promptiosaurus` = (project in file(".")).enablePlugins(PlayScala, DebianPlugin, BuildInfoPlugin)
@@ -57,5 +62,6 @@ lazy val `promptiosaurus` = (project in file(".")).enablePlugins(PlayScala, Debi
     bashScriptExtraDefines += """addJava "-Dconfig.file=${app_home}/../conf/production.conf"""",
     mappings in (Compile, packageBin) ~= { _.filterNot { case (_, s) =>
       ignoredFiles.contains(s)
-    }}
+    }},
+    scalikejdbcSettings
   )

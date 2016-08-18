@@ -13,3 +13,7 @@ addSbtPlugin("name.de-vries" % "sbt-typescript" % "0.2.6")
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.6.1")
 
 addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.6.0")
+
+libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.36"
+
+addSbtPlugin("org.scalikejdbc" %% "scalikejdbc-mapper-generator" % "2.4.2")
