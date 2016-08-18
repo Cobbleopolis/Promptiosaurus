@@ -1,7 +1,7 @@
 package controllers
 
 import auth.Role._
-import auth.User
+import models.User
 import jp.t2v.lab.play2.auth.{AsyncIdContainer, AuthConfig, TransparentIdContainer}
 import play.api.mvc.Results._
 import play.api.mvc._
@@ -20,7 +20,7 @@ trait AuthConfigImpl extends AuthConfig {
       * A type that represents a user in your application.
       * `User`, `Account` and so on.
       */
-    type User = auth.User
+    type User = models.User
 
     /**
       * A type that is defined by every action for authorization.
@@ -50,7 +50,7 @@ trait AuthConfigImpl extends AuthConfig {
       * You can alter the procedure to suit your application.
       */
     def resolveUser(id: Id)(implicit ctx: ExecutionContext): Future[Option[User]] =
-        Future.successful(User.findByEmail(id))
+        Future.successful(User.find(id))
 
     /**
       * Where to redirect the user after a successful login.
@@ -87,11 +87,12 @@ trait AuthConfigImpl extends AuthConfig {
       * You should alter this procedure to suit your application.
       */
     def authorize(user: User, authority: Authority)(implicit ctx: ExecutionContext): Future[Boolean] = Future.successful {
-        (user.role, authority) match {
-            case (Administrator, _) => true
-            case (NormalUser, NormalUser) => true
-            case _ => false
-        }
+//        (user.role, authority) match {
+//            case (Administrator, _) => true
+//            case (NormalUser, NormalUser) => true
+//            case _ => false
+//        }
+        true
     }
 
 }

@@ -14,5 +14,6 @@ dist
 /RUNNING_PID
 /.settings
 .sass-cache
-
+application.test.conf
+project/scalikejdbc.properties
     
