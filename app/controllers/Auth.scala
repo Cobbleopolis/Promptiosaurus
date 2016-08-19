@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-import auth.{RegisterData, TokenValidateElement}
+import auth.{SignUpData, TokenValidateElement}
 import jp.t2v.lab.play2.auth.LoginLogout
 import models.User
 import org.mindrot.jbcrypt.BCrypt
@@ -22,10 +22,10 @@ class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with Login
             .verifying("Invalid username or password", result => result.isDefined)
     }
 
-    val registerForm = Form {
+    val signUpForm = Form {
         mapping("username" -> nonEmptyText,
             "password" -> nonEmptyText, "confirmPassword" -> nonEmptyText,
-            "email" -> email, "confirmEmail" -> email) (RegisterData.apply)(RegisterData.unapply)
+            "email" -> email, "confirmEmail" -> email) (SignUpData.apply)(SignUpData.unapply)
             .verifying("Passwords must match", regData => regData.password == regData.confirmPassword)
             .verifying("Emails must match", regData => regData.email == regData.confirmEmail)
     }
@@ -40,8 +40,8 @@ class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with Login
         ))
     }
 
-    def register = Action { implicit request =>
-        Ok(views.html.register(registerForm))
+    def signUp = Action { implicit request =>
+        Ok(views.html.signUp(signUpForm))
     }
 
     def authenticate = Action.async { implicit request =>
@@ -51,9 +51,9 @@ class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with Login
         )
     }
 
-    def submitRegister = Action.async { implicit request =>
-        registerForm.bindFromRequest.fold(
-            formWithErrors => Future.successful(BadRequest(views.html.register(formWithErrors))),
+    def submitSignUp = Action.async { implicit request =>
+        signUpForm.bindFromRequest.fold(
+            formWithErrors => Future.successful(BadRequest(views.html.signUp(formWithErrors))),
             registerData   => Future.successful{
                 User.create(registerData.username, registerData.email, BCrypt.hashpw(registerData.password, BCrypt.gensalt(16)))
                 Redirect(routes.Auth.login())
