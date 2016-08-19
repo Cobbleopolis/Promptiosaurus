@@ -2,8 +2,10 @@ package controllers
 
 import javax.inject.Inject
 
-import auth.{TokenValidateElement, User}
+import auth.{RegisterData, TokenValidateElement}
 import jp.t2v.lab.play2.auth.LoginLogout
+import models.User
+import org.mindrot.jbcrypt.BCrypt
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -20,6 +22,14 @@ class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with Login
             .verifying("Invalid username or password", result => result.isDefined)
     }
 
+    val registerForm = Form {
+        mapping("username" -> nonEmptyText,
+            "password" -> nonEmptyText, "confirmPassword" -> nonEmptyText,
+            "email" -> email, "confirmEmail" -> email) (RegisterData.apply)(RegisterData.unapply)
+            .verifying("Passwords must match", regData => regData.password == regData.confirmPassword)
+            .verifying("Emails must match", regData => regData.email == regData.confirmEmail)
+    }
+
     def login = Action { implicit request =>
         Ok(views.html.login(loginForm))
     }
@@ -30,10 +40,24 @@ class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with Login
         ))
     }
 
+    def register = Action { implicit request =>
+        Ok(views.html.register(registerForm))
+    }
+
     def authenticate = Action.async { implicit request =>
         loginForm.bindFromRequest.fold(
             formWithErrors => Future.successful(BadRequest(views.html.login(formWithErrors))),
             user           => gotoLoginSucceeded(user.get.username)
+        )
+    }
+
+    def submitRegister = Action.async { implicit request =>
+        registerForm.bindFromRequest.fold(
+            formWithErrors => Future.successful(BadRequest(views.html.register(formWithErrors))),
+            registerData   => Future.successful{
+                User.create(registerData.username, registerData.email, BCrypt.hashpw(registerData.password, BCrypt.gensalt(16)))
+                Redirect(routes.Auth.login())
+            }
         )
     }
 }

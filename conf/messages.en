@@ -1,8 +1,18 @@
 pages.home=Home
+pages.register=Sign Up
 pages.login=Login
 pages.logout=Logout
 pages.user=User
 
+const.username=Username
+const.password=Password
+const.email=Email
+
 login.signInHeader=Sign in to {0}
 login.loginForm.username.label=Username
 login.loginForm.password.label=Password
+
+register.registerForm.confirmPassword.label=Confirm {0}
+register.registerForm.email.placeholder=example@email.com
+register.registerForm.confirmEmail.label=Confirm {0}
+register.registerForm.confirmEmail.placeholder=example@email.com
