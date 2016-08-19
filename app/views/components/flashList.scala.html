@@ -1,0 +1,16 @@
+@(params: (Symbol, Any)*)(implicit messages: Messages, flash: Flash)
+
+@genScopeItems(scope: String) = {
+@flash.get(scope).map { message =>
+    <li class="list-group-item list-group-item-@scope">@Messages(message)</li>
+}
+}
+
+@if(flash.data.nonEmpty) {
+    <ul class="list-group">
+        @genScopeItems("success")
+        @genScopeItems("info")
+        @genScopeItems("warning")
+        @genScopeItems("danger")
+    </ul>
+}

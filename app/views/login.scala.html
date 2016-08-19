@@ -1,12 +1,12 @@
 @import models.User
 @import b3.vertical.fieldConstructor
-@import components.LogoSvg  // Declares a vertical field constructor as default
+@import views.html.components._
 @(loginForm: Form[Option[User]])(implicit messages: Messages, flash: Flash)
 
 @layout(reference.NavReference.Pages.LOGIN) {
     <div class="row top-gutter">
         <div class="col-md-4 center-block text-center">
-            @LogoSvg.render('height -> 144)
+            @logoSvg('height -> 144)
             <h3>@Messages("login.signInHeader", buildinfo.BuildInfo.name)</h3>
         </div>
     </div>
@@ -19,13 +19,7 @@
                 }
                 </ul>
             }
-            @if(flash.data.contains("success")) {
-                <ul class="list-group">
-                @flash.get("success").map { message =>
-                    <li class="list-group-item list-group-item-success">@Messages(message)</li>
-                }
-                </ul>
-            }
+            @flashList()
             @b3.form(action = routes.Auth.authenticate) {
                 @b3.text(loginForm("username"),
                     '_label -> Messages("const.username")
