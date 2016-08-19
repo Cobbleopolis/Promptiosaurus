@@ -1,7 +1,7 @@
-@import auth.SignUpData
+@import auth.RegisterData
 @import b3.vertical.fieldConstructor
 @import views.html.components._
-@(signUpForm: Form[SignUpData])(implicit messages: Messages, flash: Flash)
+@(signUpForm: Form[RegisterData])(implicit messages: Messages, flash: Flash)
 
 @layout(reference.NavReference.Pages.REGISTER) {
     <div class="row">
@@ -14,7 +14,7 @@
                 </ul>
             }
             @flashList()
-            @b3.form(action = routes.Auth.submitSignUp) {
+            @b3.form(action = routes.Auth.submitRegister) {
                 @b3.text(signUpForm("username"),
                     '_label -> Messages("const.username")
                 )

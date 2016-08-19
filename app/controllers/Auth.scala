@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-import auth.{SignUpData, TokenValidateElement}
+import auth.{RegisterData, TokenValidateElement}
 import jp.t2v.lab.play2.auth.LoginLogout
 import models.User
 import org.mindrot.jbcrypt.BCrypt
@@ -26,14 +26,14 @@ class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with Login
             .verifying("Invalid username or password", result => result.isDefined)
     }
 
-    val signUpForm = Form {
+    val registerForm = Form {
         mapping(
             "username" -> nonEmptyText.verifying("Username already exists", username => User.find(username).isEmpty),
             "password" -> nonEmptyText,
             "confirmPassword" -> nonEmptyText,
             "email" -> email.verifying("Email already in use", email => User.countBy(sqls.eq(User.u.c("email"), email)) == 0),
             "confirmEmail" -> email.verifying("Email already in use", email => User.countBy(sqls.eq(User.u.c("email"), email)) == 0)
-        ) (SignUpData.apply)(SignUpData.unapply)
+        ) (RegisterData.apply)(RegisterData.unapply)
             .verifying("Passwords must match", signUpData => signUpData.password == signUpData.confirmPassword)
             .verifying("Emails must match", signUpData => signUpData.email == signUpData.confirmEmail)
     }
@@ -48,8 +48,8 @@ class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with Login
         ))
     }
 
-    def signUp = Action { implicit request =>
-        Ok(views.html.signUp(signUpForm))
+    def register = Action { implicit request =>
+        Ok(views.html.register(registerForm))
     }
 
     def authenticate = Action.async { implicit request =>
@@ -59,11 +59,11 @@ class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with Login
         )
     }
 
-    def submitSignUp = Action.async { implicit request =>
-        signUpForm.bindFromRequest.fold(
-            formWithErrors => Future.successful(BadRequest(views.html.signUp(formWithErrors))),
+    def submitRegister = Action.async { implicit request =>
+        registerForm.bindFromRequest.fold(
+            formWithErrors => Future.successful(BadRequest(views.html.register(formWithErrors))),
             registerData   => Future.successful{
-                User.create(registerData.username, registerData.email, BCrypt.hashpw(registerData.password, BCrypt.gensalt(16)))
+                registerData.toNewUser.save()
                 Redirect(routes.Auth.login())
             }
         )
