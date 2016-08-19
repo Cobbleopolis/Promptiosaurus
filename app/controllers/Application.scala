@@ -10,7 +10,6 @@ import play.api.mvc._
 class Application @Inject()(val messagesApi: MessagesApi) extends Controller with OptionalAuthElement with AuthConfigImpl with I18nSupport {
     
     def index = StackAction { implicit request =>
-//        implicit val currentUser: Option[User] = loggedIn
         Ok(views.html.index(s"${BuildInfo.name} is ready. \n Version: ${BuildInfo.version}"))
     }
 
