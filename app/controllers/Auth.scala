@@ -10,6 +10,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import scalikejdbc._
 
 import scala.concurrent.Future
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -18,16 +19,23 @@ import util.AuthUtil
 class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with LoginLogout with AuthConfigImpl with I18nSupport {
 
     val loginForm = Form {
-        mapping("username" -> nonEmptyText, "password" -> nonEmptyText)(AuthUtil.authenticate)(_.map(u => (u.username, "")))
+        mapping(
+            "username" -> nonEmptyText,
+            "password" -> nonEmptyText
+        )(AuthUtil.authenticate)(_.map(u => (u.username, "")))
             .verifying("Invalid username or password", result => result.isDefined)
     }
 
     val signUpForm = Form {
-        mapping("username" -> nonEmptyText,
-            "password" -> nonEmptyText, "confirmPassword" -> nonEmptyText,
-            "email" -> email, "confirmEmail" -> email) (SignUpData.apply)(SignUpData.unapply)
-            .verifying("Passwords must match", regData => regData.password == regData.confirmPassword)
-            .verifying("Emails must match", regData => regData.email == regData.confirmEmail)
+        mapping(
+            "username" -> nonEmptyText.verifying("Username already exists", username => User.find(username).isEmpty),
+            "password" -> nonEmptyText,
+            "confirmPassword" -> nonEmptyText,
+            "email" -> email.verifying("Email already in use", email => User.countBy(sqls.eq(User.u.c("email"), email)) == 0),
+            "confirmEmail" -> email.verifying("Email already in use", email => User.countBy(sqls.eq(User.u.c("email"), email)) == 0)
+        ) (SignUpData.apply)(SignUpData.unapply)
+            .verifying("Passwords must match", signUpData => signUpData.password == signUpData.confirmPassword)
+            .verifying("Emails must match", signUpData => signUpData.email == signUpData.confirmEmail)
     }
 
     def login = Action { implicit request =>

@@ -13,16 +13,18 @@
     <div class="row">
         <div class="col-md-4 center-block well">
             @if(loginForm.hasGlobalErrors) {
-                <ul>
+                <ul class="list-group">
                 @for(error <- loginForm.globalErrors) {
-                    <li>@Messages(error.message)</li>
+                    <li class="list-group-item list-group-item-danger">@Messages(error.message)</li>
                 }
                 </ul>
             }
-            @flash.get("success").map { message =>
-                <p class="success">
-                    @Messages(message)
-                </p>
+            @if(flash.data.contains("success")) {
+                <ul class="list-group">
+                @flash.get("success").map { message =>
+                    <li class="list-group-item list-group-item-success">@Messages(message)</li>
+                }
+                </ul>
             }
             @b3.form(action = routes.Auth.authenticate) {
                 @b3.text(loginForm("username"),

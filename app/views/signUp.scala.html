@@ -1,48 +1,44 @@
 @import auth.SignUpData
 @import b3.vertical.fieldConstructor
 
-@(registerForm: Form[SignUpData])(implicit messages: Messages, flash: Flash)
+@(signUpForm: Form[SignUpData])(implicit messages: Messages, flash: Flash)
 
 @layout(reference.NavReference.Pages.REGISTER) {
-    @*<div class="row top-gutter">*@
-        @*<div class="col-md-4 center-block text-center">*@
-            @*LogoSvg.render('height -> 144, 'width -> 144 * LogoSvg.aspectRatio)*@
-            @*<h3>@Messages("login.signInHeader", buildinfo.BuildInfo.name)</h3>*@
-        @*</div>*@
-    @*</div>*@
     <div class="row">
         <div class="col-md-4 center-block well">
-            @if(registerForm.hasGlobalErrors) {
-                <ul>
-                @for(error <- registerForm.globalErrors) {
-                    <li>@Messages(error.message)</li>
+            @if(signUpForm.hasGlobalErrors) {
+                <ul class="list-group">
+                @for(error <- signUpForm.globalErrors) {
+                    <li class="list-group-item list-group-item-danger">@Messages(error.message)</li>
                 }
                 </ul>
             }
-            @flash.get("success").map { message =>
-                <p class="success">
-                    @Messages(message)
-                </p>
+            @if(flash.data.contains("success")) {
+                <ul class="list-group">
+                @flash.get("success").map { message =>
+                    <li class="list-group-item list-group-item-success">@Messages(message)</li>
+                }
+                </ul>
             }
             @b3.form(action = routes.Auth.submitSignUp) {
-                @b3.text(registerForm("username"),
+                @b3.text(signUpForm("username"),
                     '_label -> Messages("const.username")
                 )
-                @b3.password( registerForm("password"),
+                @b3.password(signUpForm("password"),
                     '_label -> Messages("const.password")
                 )
-                @b3.password( registerForm("confirmPassword"),
+                @b3.password(signUpForm("confirmPassword"),
                     '_label -> Messages("register.registerForm.confirmPassword.label", Messages("const.password"))
                 )
-                @b3.email( registerForm("email"),
+                @b3.email(signUpForm("email"),
                     '_label -> Messages("const.email"),
                     'placeholder -> Messages("register.registerForm.email.placeholder")
                 )
-                @b3.email( registerForm("confirmEmail"),
+                @b3.email(signUpForm("confirmEmail"),
                     '_label -> Messages("register.registerForm.confirmEmail.label", Messages("const.email")),
                     'placeholder -> Messages("register.registerForm.confirmEmail.placeholder")
                 )
-                @b3.submit('class -> "btn btn-success btn-block"){ Register }
+                @b3.submit('class -> "btn btn-success btn-block") { Register }
             }
         </div>
     </div>
