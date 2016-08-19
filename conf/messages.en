@@ -9,8 +9,7 @@ const.password=Password
 const.email=Email
 
 login.signInHeader=Sign in to {0}
-login.loginForm.username.label=Username
-login.loginForm.password.label=Password
+login.submit.text=Sign In
 
 register.registerForm.confirmPassword.label=Confirm {0}
 register.registerForm.email.placeholder=example@email.com

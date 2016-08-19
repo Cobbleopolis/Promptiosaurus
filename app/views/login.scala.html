@@ -6,7 +6,7 @@
 @layout(reference.NavReference.Pages.LOGIN) {
     <div class="row top-gutter">
         <div class="col-md-4 center-block text-center">
-            @LogoSvg.render('height -> 144, 'width -> 144 * LogoSvg.aspectRatio)
+            @LogoSvg.render('height -> 144)
             <h3>@Messages("login.signInHeader", buildinfo.BuildInfo.name)</h3>
         </div>
     </div>
@@ -26,12 +26,12 @@
             }
             @b3.form(action = routes.Auth.authenticate) {
                 @b3.text(loginForm("username"),
-                    '_label -> Messages("login.loginForm.username.label")
+                    '_label -> Messages("const.username")
                 )
                 @b3.password( loginForm("password"),
-                    '_label -> Messages("login.loginForm.password.label")
+                    '_label -> Messages("const.password")
                 )
-                @b3.submit('class -> "btn btn-success btn-block"){ Sign in }
+                @b3.submit('class -> "btn btn-success btn-block"){ @Messages("login.submit.text") }
             }
         </div>
     </div>
