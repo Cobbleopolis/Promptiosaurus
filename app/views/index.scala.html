@@ -1,6 +1,6 @@
-@(message: String)(implicit messages: Messages)
+@(message: String)(implicit messages: Messages, currentUser: Option[models.User])
 
-@layout(reference.NavReference.Pages.HOME) {
+@layout() {
 
     <p>@message</p>
 

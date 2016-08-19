@@ -5,7 +5,7 @@
 # Home page
 GET         /                    controllers.Application.index
 
-GET         /user                controllers.Application.user
+GET         /user                controllers.User.profile
 
 #Auth
 GET         /login               controllers.Auth.login

@@ -2,8 +2,8 @@ package controllers
 
 import javax.inject.Inject
 
-import auth.{RegisterData, TokenValidateElement}
-import jp.t2v.lab.play2.auth.LoginLogout
+import auth.RegisterData
+import jp.t2v.lab.play2.auth.{LoginLogout, OptionalAuthElement}
 import models.User
 import org.mindrot.jbcrypt.BCrypt
 import play.api.data.Form
@@ -16,7 +16,7 @@ import scala.concurrent.Future
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import util.AuthUtil
 
-class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with LoginLogout with AuthConfigImpl with I18nSupport {
+class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with LoginLogout with OptionalAuthElement with AuthConfigImpl with I18nSupport {
 
     val loginForm = Form {
         mapping(
@@ -33,12 +33,12 @@ class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with Login
             "confirmPassword" -> nonEmptyText,
             "email" -> email.verifying("Email already in use", email => User.countBy(sqls.eq(User.u.c("email"), email)) == 0),
             "confirmEmail" -> email.verifying("Email already in use", email => User.countBy(sqls.eq(User.u.c("email"), email)) == 0)
-        ) (RegisterData.apply)(RegisterData.unapply)
+        )(RegisterData.apply)(RegisterData.unapply)
             .verifying("Passwords must match", signUpData => signUpData.password == signUpData.confirmPassword)
             .verifying("Emails must match", signUpData => signUpData.email == signUpData.confirmEmail)
     }
 
-    def login = Action { implicit request =>
+    def login = StackAction { implicit request =>
         Ok(views.html.login(loginForm))
     }
 
@@ -48,22 +48,22 @@ class Auth @Inject()(val messagesApi: MessagesApi) extends Controller with Login
         ))
     }
 
-    def register = Action { implicit request =>
+    def register = StackAction { implicit request =>
         Ok(views.html.register(registerForm))
     }
 
-    def authenticate = Action.async { implicit request =>
+    def authenticate = AsyncStack { implicit request =>
         loginForm.bindFromRequest.fold(
             formWithErrors => Future.successful(BadRequest(views.html.login(formWithErrors))),
-            user           => gotoLoginSucceeded(user.get.username)
+            user => gotoLoginSucceeded(user.get.username)
         )
     }
 
-    def submitRegister = Action.async { implicit request =>
+    def submitRegister = AsyncStack { implicit request =>
         registerForm.bindFromRequest.fold(
             formWithErrors => Future.successful(BadRequest(views.html.register(formWithErrors))),
-            registerData   => Future.successful{
-                registerData.toNewUser.save()
+            registerData => Future.successful {
+                User.create(registerData.username, registerData.email, BCrypt.hashpw(registerData.password, BCrypt.gensalt(16)))
                 Redirect(routes.Auth.login())
             }
         )

@@ -1,8 +1,8 @@
 @import models.User
-@(user: User)(implicit messages: Messages)
+@(user: User)(implicit messages: Messages, currentUser: User)
 
-@layout(reference.NavReference.Pages.USER) {
+@layout() {
     <p>Hello @user.username</p>
     <p>Email: @user.email</p>
     <p>Password: @user.password</p>
-}
+}(messages, Option(currentUser))

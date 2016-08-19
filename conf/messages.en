@@ -1,8 +1,7 @@
-pages.home=Home
-pages.register=Sign Up
-pages.login=Login
-pages.logout=Logout
-pages.user=User
+nav.logIn=Log In
+nav.register=Sign Up
+nav.user.profile=Profile
+nav.user.logOut=Log Out
 
 const.username=Username
 const.password=Password

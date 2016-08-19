@@ -56,7 +56,7 @@ trait AuthConfigImpl extends AuthConfig {
       * Where to redirect the user after a successful login.
       */
     def loginSucceeded(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] =
-        Future.successful(Redirect(routes.Application.user()))
+        Future.successful(Redirect(routes.User.profile()))
 
     /**
       * Where to redirect the user after logging out
